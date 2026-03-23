@@ -44,4 +44,9 @@ public class AuthController {
 
         return userService.resetPassword(email, newPassword);
     }
+    
+    @GetMapping("/allow")
+    public String allowServer() {
+    	return "Backend is running";
+    }
 }
