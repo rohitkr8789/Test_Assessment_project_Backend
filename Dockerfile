@@ -1,14 +1,14 @@
-# Use Java 17
-FROM eclipse-temurin:17-jdk
-
-# Set working directory
+# Stage 1: Build
+FROM maven:3.9.6-eclipse-temurin-17 AS build
 WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
 
-# Copy jar file
-COPY target/TestAssessmentProject.jar app.jar
+# Stage 2: Run
+FROM eclipse-temurin:17-jdk
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 
-# Expose port (optional but good practice)
 EXPOSE 8080
 
-# Run application
-ENTRYPOINT ["java","-jar","/app/app.jar"]
+ENTRYPOINT ["java","-jar","app.jar"]
